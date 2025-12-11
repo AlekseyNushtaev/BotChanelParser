@@ -11,10 +11,9 @@ db/database.db
 db/config.db
 load/userbot.py
 load/
-userbot/
 old/
 load/deploy.sh
-my_session.session
+anon.session
 # Distribution / packaging
 .Python
 build/
