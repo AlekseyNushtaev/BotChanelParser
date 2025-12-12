@@ -5,7 +5,7 @@ from aiogram import Dispatcher
 
 from config import API_ID, API_HASH
 from db.models import create_tables
-from handlers import handlers_admin, handlers_export
+from handlers import handlers_admin_post, handlers_export, handlers_admin_digest
 from bot import bot
 from typing import NoReturn
 
@@ -60,8 +60,9 @@ async def main() -> None:
         dp: Dispatcher = Dispatcher()
 
         # Регистрация роутеров
-        dp.include_router(handlers_admin.admin_router)  # Административные обработчики
-        dp.include_router(handlers_export.export_router)  # Административные обработчики
+        dp.include_router(handlers_admin_post.post_router)
+        dp.include_router(handlers_admin_digest.digest_router)
+        dp.include_router(handlers_export.export_router)
         logger.info("Роутеры успешно зарегистрированы")
 
         # Удаление вебхука для очистки ожидающих обновлений

@@ -47,12 +47,13 @@ def prompt_digest():
 </Context>
 
 <Instructions>
-1. При рерайтинге оставь те же смыслы, которые несет пост.
-2. На каждую новость сделай 1-3 предложения.
-3. Красиво оформи, можешь добавить соответствующие эмодзи, ключевые слова выдели жирным текстом (разметка HTML для Telegram, использовать теги <b> и <a>, остальные нет)
-3. Если в тексте есть html разметка, то перенеси эту разметку в соответствующих местах.
-4. Перед отправкой результата обязательно еще раз посмотри, чтобы твоя HTML разметка была корректна (важно чтобы не была Markdown, а именно HTML), если найдешь ошибки - заново переработай текст.
-5. Используй в оформлении только теги <a>, </a>, <b>, </b> остальные использовать строго нельзя, если найдешь другие теги - заново переработай текст.
+1. Озаглавь пост, например - Дайджест на сегодня, Основные новости и т.п.
+2. При рерайтинге оставь те же смыслы, которые несет пост.
+3. На каждую новость сделай 1-3 предложения.
+4. Красиво оформи, можешь добавить соответствующие эмодзи, ключевые слова выдели жирным текстом (разметка HTML для Telegram, использовать теги <b> и <a>, остальные нет)
+5. Если в тексте есть html разметка, то перенеси эту разметку в соответствующих местах.
+6. Перед отправкой результата обязательно еще раз посмотри, чтобы твоя HTML разметка была корректна (важно чтобы не была Markdown, а именно HTML), если найдешь ошибки - заново переработай текст.
+7. Используй в оформлении только теги <a>, </a>, <b>, </b> остальные использовать строго нельзя, если найдешь другие теги - заново переработай текст.
 </Instructions>
     """
 
@@ -62,7 +63,7 @@ async def post_gen(text):
     print(datetime.datetime.now())
     try:
         response = await client.chat.completions.create(
-            model="deepseek/deepseek-r1-0528",
+            model="deepseek/deepseek-r1",
             messages=[
                 {
                     "role": "system",
@@ -76,7 +77,7 @@ async def post_gen(text):
             timeout=60.0  # Устанавливаем таймаут
         )
         print(datetime.datetime.now())
-        return response.choices[0].message.content
+        return response.choices[0].message.content.replace('<br>', '')
     except Exception as e:
         return f"Ошибка при генерации текста: {e}"
 
@@ -87,11 +88,11 @@ async def post_digest(messages):
     messages_digest = [{"role": "system", "content": prompt_digest()}] + messages
     try:
         response = await client.chat.completions.create(
-            model="deepseek/deepseek-r1-0528",
+            model="deepseek/deepseek-chat",
             messages=messages_digest,
             timeout=60.0  # Устанавливаем таймаут
         )
         print(datetime.datetime.now())
-        return response.choices[0].message.content
+        return response.choices[0].message.content.replace('<br>', '')
     except Exception as e:
         return f"Ошибка при генерации текста: {e}"
